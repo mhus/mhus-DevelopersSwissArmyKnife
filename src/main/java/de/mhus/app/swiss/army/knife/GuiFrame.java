@@ -1,77 +1,157 @@
 package de.mhus.app.swiss.army.knife;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.Insets;
+import java.awt.GridLayout;
+import java.awt.Toolkit;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.util.HashSet;
+import java.util.LinkedList;
 
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.WindowConstants;
 
+import de.mhus.app.swiss.army.knife.sections.ObfuscateStringSection;
+import de.mhus.app.swiss.army.knife.sections.RegExMatchSection;
+import de.mhus.app.swiss.army.knife.sections.RegExReplaceSection;
+import de.mhus.app.swiss.army.knife.sections.ScriptSection;
+import de.mhus.app.swiss.army.knife.sections.XPathSection;
 import de.mhus.lib.core.MSwing;
 
 public class GuiFrame {
 
-	private ImageIcon icon;
-	private String title = "TheKnife";
+	private static final int WINDOW_POS_X_START = 40;
+    private static final int WINDOW_POS_Y_START = 40;
+    private String title = "The Knife";
+    private JPanel mainPanel;
+    private JPanel sectionsPanel;
+    private JScrollPane sectionsScroll;
+    private LinkedList<Section> sections;
+    private JFrame frame;
+    private HashSet<GuiWindow> windows = new HashSet<>();
+    private int nextPosX = WINDOW_POS_X_START;
+    private int nextPosY = WINDOW_POS_Y_START;
 
 	public GuiFrame() {
 		
-		JPanel panel = new JPanel();
-		
-		JFrame frame = new JFrame();
+	    collectSections();
+
+		frame = new JFrame();
 		
 		MSwing.halfFrame(frame);
-		MSwing.centerFrame(frame);
+        frame.setSize(300, frame.getHeight());
+		setNextPosition(frame);
 		
-		frame.getContentPane().add(panel);
 //		if ( frame.getIconImage() != null )
 //			icon = new ImageIcon( frame.getIconImage() );
+		frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		frame.addWindowListener(new WindowListener() {
 
-			public void windowActivated(WindowEvent e) {
+			@Override
+            public void windowActivated(WindowEvent e) {
 			}
 
-			public void windowClosed(WindowEvent e) {
+			@Override
+            public void windowClosed(WindowEvent e) {
 			}
 
-			public void windowClosing(WindowEvent e) {
+			@Override
+            public void windowClosing(WindowEvent e) {
+			    if ( JOptionPane.showConfirmDialog(frame, "Really close application", title, JOptionPane.WARNING_MESSAGE) != JOptionPane.OK_OPTION)
+			        return;
 				System.exit(0);
 			}
 
-			public void windowDeactivated(WindowEvent e) {
+			@Override
+            public void windowDeactivated(WindowEvent e) {
 			}
 
-			public void windowDeiconified(WindowEvent e) {
+			@Override
+            public void windowDeiconified(WindowEvent e) {
 			}
 
-			public void windowIconified(WindowEvent e) {
+			@Override
+            public void windowIconified(WindowEvent e) {
 			}
 
-			public void windowOpened(WindowEvent e) {
+			@Override
+            public void windowOpened(WindowEvent e) {
 			}
 
 		});
 
-		// put frame into a list of available windows
-		JMenuItem item = new JMenuItem(title);
-		if ( icon != null ) item.setIcon(icon);
-//		item.addActionListener(new WindowActionListener(panel));
-//		windowManagerMenu.add(item);
-		JButton button = new JButton( title );
-		button.setMaximumSize(new Dimension(150,40));
-		button.setToolTipText(title);
-		button.setMargin(new Insets(2,2,2,2));
-		if ( icon != null ) button.setIcon(icon);
-//		button.addActionListener(new WindowActionListener(panel));
-//		windowManagerPanel.add(button);
-//		windowList.put(panel, new Object[] { frame, item, button });
+		mainPanel = new JPanel();
+		mainPanel.setLayout(new BorderLayout());
+		
+		sectionsPanel = new JPanel();
+		sectionsScroll = new JScrollPane(sectionsPanel);
+		
+		mainPanel.add(sectionsScroll, BorderLayout.CENTER);
 
+        frame.getContentPane().add(mainPanel);
 		frame.setVisible(true);
 
+		updateMainPanel();
+		
 	}
+
+    private void updateMainPanel() {
+        sectionsPanel.removeAll();
+        sectionsPanel.setLayout(new BorderLayout());
+
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(sections.size(), 1));
+        
+        for (Section section : sections) {
+            JButton button = new JButton(section.getTitle());
+            button.setSize(new Dimension(500, 50));
+            button.addActionListener(l -> new GuiWindow(this, section ) );
+            
+            panel.add(button);
+        }
+        sectionsPanel.add(panel,BorderLayout.NORTH);
+        mainPanel.updateUI();
+    }
+
+    public void register(GuiWindow window) {
+        windows.add(window);
+    }
+    
+    public void unregister(GuiWindow window) {
+        windows.remove(window);
+    }
+
+    public void setNextPosition(JFrame frame) {
+        
+        
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        if (nextPosX + frame.getWidth() > screenSize.width) {
+            nextPosX = WINDOW_POS_X_START;
+            nextPosY = nextPosY + 100;
+        }
+            
+        if (nextPosY + frame.getHeight() > screenSize.height) {
+            nextPosY = WINDOW_POS_Y_START;
+        }
+        frame.setLocation(nextPosX, nextPosY);
+        
+        nextPosX = nextPosX + 300;
+        nextPosY = nextPosY +15;
+    }
+
+    private void collectSections() {
+        sections = new LinkedList<>();
+        sections.add(new RegExReplaceSection());
+        sections.add(new RegExMatchSection());
+        sections.add(new XPathSection());
+        sections.add(new ScriptSection());
+        sections.add(new ObfuscateStringSection());
+    }
+
+
 }
