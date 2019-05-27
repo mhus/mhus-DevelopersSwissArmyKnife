@@ -46,7 +46,8 @@ public class RegExReplaceEditor extends JPanel {
 		
 		bExecute.addActionListener( new ActionListener() {
 
-			public void actionPerformed(ActionEvent e) {
+			@Override
+            public void actionPerformed(ActionEvent e) {
 				try {
 					result.setText( 
 							from.getText().replaceAll( rule.getText(), repl.getText() )

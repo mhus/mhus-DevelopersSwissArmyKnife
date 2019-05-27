@@ -11,6 +11,7 @@ import de.mhus.lib.core.MSwing;
 public class GuiWindow {
 
     private JFrame frame;
+    @SuppressWarnings("unused")
     private GuiFrame gui;
 
     public GuiWindow(GuiFrame gui, Section section) {

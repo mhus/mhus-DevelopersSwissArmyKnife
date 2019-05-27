@@ -20,6 +20,7 @@ import de.mhus.app.swiss.army.knife.sections.ObfuscateStringSection;
 import de.mhus.app.swiss.army.knife.sections.RegExMatchSection;
 import de.mhus.app.swiss.army.knife.sections.RegExReplaceSection;
 import de.mhus.app.swiss.army.knife.sections.ScriptSection;
+import de.mhus.app.swiss.army.knife.sections.Utf8Section;
 import de.mhus.app.swiss.army.knife.sections.XPathSection;
 import de.mhus.lib.core.MSwing;
 
@@ -151,6 +152,7 @@ public class GuiFrame {
         sections.add(new XPathSection());
         sections.add(new ScriptSection());
         sections.add(new ObfuscateStringSection());
+        sections.add(new Utf8Section());
     }
 
 

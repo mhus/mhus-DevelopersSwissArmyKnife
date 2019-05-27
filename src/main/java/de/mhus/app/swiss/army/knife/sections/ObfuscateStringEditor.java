@@ -16,8 +16,9 @@ import org.apache.commons.codec.Charsets;
 
 public class ObfuscateStringEditor extends JPanel {
 
+    private static final long serialVersionUID = 1L;
     private JTextField from;
-    private JComboBox type;
+    private JComboBox<String> type;
     private static JTextArea result;
 
     public ObfuscateStringEditor() {
