@@ -8,6 +8,7 @@ import java.util.Random;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -44,17 +45,21 @@ public class ObfuscateStringEditor extends JPanel {
     }
 
     private void doExecute() {
-        String out = "";
-        switch (type.getSelectedItem().toString()) {
-        case "Java":
-            out = obfuscateJava(from.getText());
-            break;
-        case "C#":
-            out = obfuscateCSharp(from.getText());
-            break;
+        try {
+            String out = "";
+            switch (type.getSelectedItem().toString()) {
+            case "Java":
+                out = obfuscateJava(from.getText());
+                break;
+            case "C#":
+                out = obfuscateCSharp(from.getText());
+                break;
+            }
+            
+            result.setText(out);
+        } catch (Throwable t) {
+            JOptionPane.showMessageDialog(this, t.toString(),"Error",JOptionPane.ERROR_MESSAGE);
         }
-        
-        result.setText(out);
     }
 
     private String obfuscateJava(String text) {

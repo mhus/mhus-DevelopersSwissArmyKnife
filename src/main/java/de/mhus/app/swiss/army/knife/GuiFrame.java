@@ -16,6 +16,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.WindowConstants;
 
+import de.mhus.app.swiss.army.knife.sections.Base64Section;
 import de.mhus.app.swiss.army.knife.sections.ObfuscateStringSection;
 import de.mhus.app.swiss.army.knife.sections.RegExMatchSection;
 import de.mhus.app.swiss.army.knife.sections.RegExReplaceSection;
@@ -146,6 +147,7 @@ public class GuiFrame {
     }
 
     private void collectSections() {
+        // TODO dynamic loading from dependencies
         sections = new LinkedList<>();
         sections.add(new RegExReplaceSection());
         sections.add(new RegExMatchSection());
@@ -153,6 +155,7 @@ public class GuiFrame {
         sections.add(new ScriptSection());
         sections.add(new ObfuscateStringSection());
         sections.add(new Utf8Section());
+        sections.add(new Base64Section());
     }
 
 
