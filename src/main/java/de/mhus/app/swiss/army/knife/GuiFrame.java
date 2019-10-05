@@ -1,6 +1,7 @@
 package de.mhus.app.swiss.army.knife;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
@@ -14,10 +15,12 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 
 import de.mhus.app.swiss.army.knife.sections.Base64Section;
 import de.mhus.app.swiss.army.knife.sections.ObfuscateStringSection;
+import de.mhus.app.swiss.army.knife.sections.PeriodSection;
 import de.mhus.app.swiss.army.knife.sections.RegExMatchSection;
 import de.mhus.app.swiss.army.knife.sections.RegExReplaceSection;
 import de.mhus.app.swiss.army.knife.sections.ScriptSection;
@@ -109,7 +112,22 @@ public class GuiFrame {
         sectionsPanel.setLayout(new BorderLayout());
 
         JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(sections.size(), 1));
+        panel.setLayout(new GridLayout(sections.size() + 1, 1));
+        
+        JTextField search = new JTextField();
+        search.addActionListener(l -> {
+            String text = search.getText();
+            text = text.trim().toLowerCase();
+            for (int i = 0; i < panel.getComponentCount(); i++) {
+                Component c = panel.getComponent(i);
+                if (c instanceof JButton) {
+                    JButton b = (JButton)c;
+                    b.setVisible(text.length() == 0 || b.getText().toLowerCase().contains(text) );
+                }
+            }
+            
+        });
+        panel.add(search);
         
         for (Section section : sections) {
             JButton button = new JButton(section.getTitle());
@@ -160,6 +178,7 @@ public class GuiFrame {
         sections.add(new Base64Section());
         sections.add(new TimestampSection());
         sections.add(new UuidSection());
+        sections.add(new PeriodSection());
     }
 
 
