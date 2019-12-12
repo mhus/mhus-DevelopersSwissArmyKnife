@@ -20,6 +20,7 @@ import javax.swing.WindowConstants;
 
 import de.mhus.app.swiss.army.knife.sections.Base64Section;
 import de.mhus.app.swiss.army.knife.sections.ObfuscateStringSection;
+import de.mhus.app.swiss.army.knife.sections.PasswordSection;
 import de.mhus.app.swiss.army.knife.sections.PeriodSection;
 import de.mhus.app.swiss.army.knife.sections.RegExMatchSection;
 import de.mhus.app.swiss.army.knife.sections.RegExReplaceSection;
@@ -179,6 +180,7 @@ public class GuiFrame {
         sections.add(new TimestampSection());
         sections.add(new UuidSection());
         sections.add(new PeriodSection());
+        sections.add(new PasswordSection());
     }
 
 
